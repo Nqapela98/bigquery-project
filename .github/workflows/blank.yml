@@ -1,0 +1,27 @@
+name: Run BigQuery Summary
+
+on:
+  schedule:
+    - cron: '*/60 * * * *'  # ⏰ Run every 60 minutes
+  workflow_dispatch:        # 🧑‍💻 Allow manual runs
+
+jobs:
+  bigquery-job:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Set up Google Cloud SDK
+        uses: google-github-actions/setup-gcloud@v1
+        with:
+          project_id: deft-advice-459518-c8
+          service_account_key: ${{ secrets.GOOGLE_ACCOUNT_KEY }}
+          export_default_credentials: true
+
+      - name: Run SQL query
+        run: |
+          set -e
+          echo "Running query..."
+          bq query --use_legacy_sql=false < sql/daily_event_summary.sql
