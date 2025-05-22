@@ -3,7 +3,7 @@ name: Run BigQuery Summary
 on:
   schedule:
     - cron: '0 * * * *'  # ⏰ Every hour on the hour
-  workflow_dispatch:     # 🧑‍💻 Allow manual runs
+  workflow_dispatch:       # 🧑‍💻 Manual trigger
 
 jobs:
   bigquery-job:
@@ -13,22 +13,19 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
 
-      # ✅ AUTHENTICATE using Service Account Key
       - name: Authenticate to Google Cloud
         uses: google-github-actions/auth@v1
         with:
           credentials_json: ${{ secrets.GOOGLE_ACCOUNT_KEY }}
 
-      # ✅ SETUP gcloud CLI
       - name: Set up Google Cloud SDK
         uses: google-github-actions/setup-gcloud@v1
         with:
           project_id: deft-advice-459518-c8
 
-      # ✅ RUN BigQuery Query
       - name: Run SQL query
         run: |
           set -e
           echo "Running query..."
-          bq query --use_legacy_sql=false < sql/hourly_event_summary.sql > data/daily_event_summary.csv
-
+          mkdir -p data
+          bq query --use_legacy_sql=false --format=csv < sql/hourly_event_summary.sql > data/daily_event_summary.csv
