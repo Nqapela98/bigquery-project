@@ -39,3 +39,4 @@ jobs:
           git add data/daily_event_summary.csv
           git commit -m "Update daily_event_summary.csv" || echo "No changes to commit"
           git push https://x-access-token:${GH_TOKEN}@github.com/${{ github.repository }} HEAD:${{ github.ref_name }}
+
