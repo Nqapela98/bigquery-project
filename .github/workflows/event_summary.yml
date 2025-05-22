@@ -31,9 +31,11 @@ jobs:
           bq query --use_legacy_sql=false --format=csv < sql/hourly_event_summary.sql > data/daily_event_summary.csv
 
       - name: Commit and push results
+        env:
+          GH_TOKEN: ${{ secrets.GH_PAT }}
         run: |
           git config user.name "github-actions"
           git config user.email "github-actions@github.com"
           git add data/daily_event_summary.csv
           git commit -m "Update daily_event_summary.csv" || echo "No changes to commit"
-          git push
+          git push https://x-access-token:${GH_TOKEN}@github.com/${{ github.repository }} HEAD:${{ github.ref_name }}
