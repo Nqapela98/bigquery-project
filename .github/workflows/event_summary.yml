@@ -24,4 +24,4 @@ jobs:
         run: |
           set -e
           echo "Running query..."
-          bq query --use_legacy_sql=false < sql/hourly_event_summary.sql
+          bq query --use_legacy_sql=false < sql/hourly_event_summary.sql > data/daily_event_summary.csv
