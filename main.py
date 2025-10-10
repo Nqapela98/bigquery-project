@@ -22,6 +22,7 @@ async def main():
 
 
     extracted = await extractor.extract(parsed, expected)
+    print(extracted.model_dump_json(indent=2))
 
     print("\n=== Extracted Fields ===")
     for kv in extracted.key_values:
